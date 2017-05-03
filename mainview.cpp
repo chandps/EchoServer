@@ -3,7 +3,7 @@
 #include <QTcpServer>
 #include <QMessageBox>
 
-static const PORT_NUMBER = 23;
+static const int PORT_NUMBER = 23;
 
 MainView::MainView(QWidget *parent) :
     QMainWindow(parent),
@@ -20,9 +20,12 @@ MainView::~MainView()
 
 void MainView::on_btnStartServer_clicked()
 {
-    StartServer();
-    ui->btnStartServer->setEnabled(false);
-    ui->btnStopServer->setEnabled(true);
+
+    if (StartServer())
+    {
+        ui->btnStartServer->setEnabled(false);
+        ui->btnStopServer->setEnabled(true);
+    }
 }
 
 void MainView::on_btnStopServer_clicked()
@@ -37,8 +40,12 @@ bool MainView::StartServer()
     bool result = m_server->listen(QHostAddress::Any, PORT_NUMBER);
     if(!result)
     {
-//        QMessageBox::critical(this, tr("Echo Server"))
+        QMessageBox::critical(this, tr("Echo Server"),
+                              tr("Unable to start the server: %1")
+                              .arg(m_server->errorString()));
+        return false;
     }
+    return true;
 }
 
 void MainView::StopServer()
