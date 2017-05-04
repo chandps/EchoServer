@@ -29,4 +29,5 @@ SOURCES += main.cpp\
 HEADERS  += mainview.h
 
 FORMS    += mainview.ui
+
 QMAKE_CXXFLAGS += -std=c++11
